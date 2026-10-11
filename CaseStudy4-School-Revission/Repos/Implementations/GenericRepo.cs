@@ -28,7 +28,7 @@ namespace CaseStudy4_School_Revission.Repos.Implementations
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T?> GetById(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
 

@@ -9,9 +9,11 @@ namespace CaseStudy4_School_Revission.DTOs.EnrollmentDTOs
 
         [Required]
         public int StudentId { get; set; }
+        public string StudentName { get; set; }
 
         [Required]
         public int CourseId { get; set; }
+        public string CourseTitle { get; set; }
 
         [Required]
         public DateTime EnrollmentDate { get; set; }

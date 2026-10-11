@@ -1,7 +1,11 @@
 using CaseStudy4_School_Revission.Data;
 using CaseStudy4_School_Revission.Repos.Implementations;
 using CaseStudy4_School_Revission.Repos.Interfaces;
+using CaseStudy4_School_Revission.UoW.Implementation;
+using CaseStudy4_School_Revission.UoW.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,18 +17,83 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
 
 builder.Services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
-builder.Services.AddScoped<IStudentRepo , StudentRepo>();
+builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 
-builder.Services.AddScoped<ICourseRepo , CourseRepo>();
+builder.Services.AddScoped<ICourseRepo, CourseRepo>();
 
+builder.Services.AddScoped<IEnrollmentRepo, EnrollmentRepo>();
+
+builder.Services.AddScoped<IReportRepo, ReportRepo>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+
+
+//////
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
+
+
+app.Use(async (context, next) => 
+{
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An unexpected error occurred.");
+
+        if (!context.Response.HasStarted)
+        {
+            context.Response.StatusCode = 500;
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                StatusCode = 500,
+                Message = "An unexpected error occurred."
+            });
+        }
+    }
+});
+
+//app.Use(async (context, next) =>
+//{
+//    Console.WriteLine($"[Request] Method: {context.Request.Method}, Path: {context.Request.Path}");
+
+//    await next(); 
+
+//    Console.WriteLine($"[Response] Status Code: {context.Response.StatusCode}");
+//});
+
+// Request Logging Middleware
+app.Use(async (context, next) =>
+{
+    var startTime = DateTime.UtcNow;
+
+    await next();
+
+    var duration = DateTime.UtcNow - startTime;
+
+    app.Logger.LogInformation
+    (
+        "Request: {Method} {Path} | Status Code: {StatusCode} | Duration: {Duration} ms",
+        context.Request.Method,
+        context.Request.Path,
+        context.Response.StatusCode,
+        duration.TotalMilliseconds
+    );
+});
+
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

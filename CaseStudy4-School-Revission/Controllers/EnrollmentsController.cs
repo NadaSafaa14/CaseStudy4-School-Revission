@@ -20,7 +20,7 @@ namespace CaseStudy4_School_Revission.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var enrollments = await _unitOfWork.Enrollments.GetAll();
+            var enrollments = await _unitOfWork.Enrollments.GetAllEnrollmentsAsync();
 
             if (enrollments == null || enrollments.Count == 0)
             {
@@ -38,6 +38,8 @@ namespace CaseStudy4_School_Revission.Controllers
                     Grade = e.Grade,
                     Id = e.Id,
                     StudentId = e.StudentId,
+                    StudentName = e.Student?.FullName ?? "Unknown",
+                    CourseTitle = e.Course?.Title ?? "Unknown",
                 });
             }
 
@@ -52,19 +54,121 @@ namespace CaseStudy4_School_Revission.Controllers
                 return BadRequest();
             }
 
+            var student = await _unitOfWork.Students
+                .GetById(dto.StudentId);
+
+            if (student == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            var course = await _unitOfWork.Courses
+                .GetById(dto.CourseId);
+
+            if (course == null)
+            {
+                return NotFound("Course not found.");
+            }
+
+            bool alreadyEnrolled =
+                await _unitOfWork.Enrollments
+                    .IsStudentEnrolledAsync(
+                        dto.StudentId,
+                        dto.CourseId);
+
+            if (alreadyEnrolled)
+            {
+                return BadRequest(
+                    "Student is already enrolled in this course.");
+            }
+
             var e = new Enrollment
             {
-                CourseId =dto.CourseId,
+                CourseId = dto.CourseId,
                 EnrollmentDate = dto.EnrollmentDate,
                 Grade = dto.Grade,
-                StudentId=dto.StudentId,
+                StudentId = dto.StudentId,
             };
 
             _unitOfWork.Enrollments.Add(e);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return Created();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var enrollment =
+                await _unitOfWork.Enrollments.GetById(id);
+
+            if (enrollment == null)
+            { 
+                return NotFound("Enrollment not found.");
+            }
+
+            _unitOfWork.Enrollments.Delete(enrollment);
+
+            await _unitOfWork.SaveAsync();
+
+            return NoContent();
+        }
+
+        [HttpGet("course/{id}")]
+        public async Task<IActionResult> GetByCourse(int id)
+        {
+            var course =
+                await _unitOfWork.Courses.GetById(id);
+
+            if (course == null)
+            {
+                return NotFound("Course not found.");
+            }
+
+            var enrollments =
+                await _unitOfWork.Enrollments.GetByCourseAsync(id);
+
+            var result = enrollments.Select(e => new GetEnrollmentDTO
+            {
+                Id = e.Id,
+                CourseId = e.CourseId,
+                StudentId = e.StudentId,
+                StudentName = e.Student?.FullName ?? "Unknown",
+                CourseTitle = e.Course?.Title ?? "Unknown",
+                EnrollmentDate = e.EnrollmentDate,
+                Grade = e.Grade
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("student/{id}")]
+        public async Task<IActionResult> GetByStudent(int id)
+        {
+            var s =
+                await _unitOfWork.Students.GetById(id);
+
+            if (s == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            var enrollments =
+                await _unitOfWork.Enrollments.GetByStudentAsync(id);
+
+            var result = enrollments.Select(e => new GetEnrollmentDTO
+            {
+                Id = e.Id,
+                CourseId = e.CourseId,
+                StudentId = e.StudentId,
+                StudentName = e.Student?.FullName ?? "Unknown",
+                CourseTitle = e.Course?.Title ?? "Unknown",
+                EnrollmentDate = e.EnrollmentDate,
+                Grade = e.Grade
+            });
+
+            return Ok(result);
         }
 
     }

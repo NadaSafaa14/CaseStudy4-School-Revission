@@ -31,21 +31,19 @@ namespace CaseStudy4_School_Revission.Controllers
                 Email = dto.Email,
                 Gender = dto.Gender,
                 Phone = dto.Phone,
-            };
 
-            var studentprofile = new StudentProfile
-            {
-                Address = dto.Address,
-                EmergencyContact = dto.EmergencyContact,
-                ParentPhone = dto.ParentPhone,
-                StudentId = student.Id,
+                StudentProfile = new StudentProfile
+                {
+                    Address = dto.Address,
+                    ParentPhone = dto.ParentPhone,
+                    EmergencyContact = dto.EmergencyContact
+                }
+
             };
 
             _unitOfWork.Students.Add(student);
 
-            _unitOfWork.StudentProfiles.Add(studentprofile);
-
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return Created();
         }
@@ -132,7 +130,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Students.Update(student);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -149,7 +147,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Students.Delete(student);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -213,7 +211,7 @@ namespace CaseStudy4_School_Revission.Controllers
         [HttpGet("Paging")]
         public async Task<IActionResult> Paging(int pagesize , int pagenumber)
         {
-            var students = await _unitOfWork.Students.Paging(pagesize, pagenumber);
+            var students = await _unitOfWork.Students.Paging(pagenumber, pagesize);
 
             if (students == null || students.Count == 0)
             {

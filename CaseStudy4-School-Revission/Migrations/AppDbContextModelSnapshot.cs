@@ -46,6 +46,29 @@ namespace CaseStudy4_School_Revission.Migrations
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreditHours = 3,
+                            TeacherId = 1,
+                            Title = "Programming Fundamentals"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreditHours = 4,
+                            TeacherId = 2,
+                            Title = "Database Systems"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreditHours = 3,
+                            TeacherId = 1,
+                            Title = "Web Development"
+                        });
                 });
 
             modelBuilder.Entity("CaseStudy4_School_Revission.Models.Enrollment", b =>
@@ -63,7 +86,8 @@ namespace CaseStudy4_School_Revission.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("Grade")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -76,6 +100,31 @@ namespace CaseStudy4_School_Revission.Migrations
                         .IsUnique();
 
                     b.ToTable("Enrollments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CourseId = 1,
+                            EnrollmentDate = new DateTime(2026, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Grade = 90m,
+                            StudentId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CourseId = 2,
+                            EnrollmentDate = new DateTime(2026, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Grade = 85.50m,
+                            StudentId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CourseId = 3,
+                            EnrollmentDate = new DateTime(2026, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StudentId = 3
+                        });
                 });
 
             modelBuilder.Entity("CaseStudy4_School_Revission.Models.Student", b =>
@@ -112,6 +161,35 @@ namespace CaseStudy4_School_Revission.Migrations
                         .IsUnique();
 
                     b.ToTable("Students");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BirthDate = new DateTime(2010, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ali.hassan@school.com",
+                            FullName = "Ali Hassan",
+                            Gender = "Male",
+                            Phone = "01011111111"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BirthDate = new DateTime(2010, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "mariam.ahmed@school.com",
+                            FullName = "Mariam Ahmed",
+                            Gender = "Female",
+                            Phone = "01022222222"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BirthDate = new DateTime(2009, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "omar.khaled@school.com",
+                            FullName = "Omar Khaled",
+                            Gender = "Male",
+                            Phone = "01033333333"
+                        });
                 });
 
             modelBuilder.Entity("CaseStudy4_School_Revission.Models.StudentProfile", b =>
@@ -144,6 +222,32 @@ namespace CaseStudy4_School_Revission.Migrations
                         .IsUnique();
 
                     b.ToTable("StudentProfiles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Nasr City, Cairo",
+                            EmergencyContact = "01211111111",
+                            ParentPhone = "01111111111",
+                            StudentId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Heliopolis, Cairo",
+                            EmergencyContact = "01222222222",
+                            ParentPhone = "01122222222",
+                            StudentId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Maadi, Cairo",
+                            EmergencyContact = "01233333333",
+                            ParentPhone = "01133333333",
+                            StudentId = 3
+                        });
                 });
 
             modelBuilder.Entity("CaseStudy4_School_Revission.Models.Teacher", b =>
@@ -176,6 +280,32 @@ namespace CaseStudy4_School_Revission.Migrations
                         .IsUnique();
 
                     b.ToTable("Teachers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "ahmed.samir@school.com",
+                            FullName = "Ahmed Samir",
+                            HireDate = new DateTime(2020, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Phone = "01044444444"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "nour.adel@school.com",
+                            FullName = "Nour Adel",
+                            HireDate = new DateTime(2021, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Phone = "01055555555"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "hany.mostafa@school.com",
+                            FullName = "Hany Mostafa",
+                            HireDate = new DateTime(2019, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Phone = "01066666666"
+                        });
                 });
 
             modelBuilder.Entity("CaseStudy4_School_Revission.Models.Course", b =>

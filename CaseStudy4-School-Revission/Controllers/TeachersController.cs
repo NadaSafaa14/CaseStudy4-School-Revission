@@ -62,7 +62,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Teachers.Add(teacher);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return Created();
         }
@@ -106,7 +106,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Teachers.Update(teacher);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -123,7 +123,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Teachers.Delete(teacher);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }

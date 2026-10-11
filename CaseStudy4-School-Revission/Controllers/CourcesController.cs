@@ -61,7 +61,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Courses.Add(c);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return Created();
         }
@@ -104,7 +104,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Courses.Update(c);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -121,7 +121,7 @@ namespace CaseStudy4_School_Revission.Controllers
 
             _unitOfWork.Courses.Delete(c);
 
-            _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -152,6 +152,37 @@ namespace CaseStudy4_School_Revission.Controllers
             return Ok(dto);
         }
 
+        [HttpGet("filter")]
+        public async Task<IActionResult> Filter(int? teacherId, int? creditHours)
+        {
+            var courses =
+                await _unitOfWork.Courses.FilterCoursesAsync(
+                    teacherId,
+                    creditHours);
 
+            var result = courses.Select(c => new GetCourseDTO
+            {
+                Id = c.Id,
+                Title = c.Title,
+                CreditHours = c.CreditHours,
+                TeacherId = c.TeacherId
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}/has-students")]
+        public async Task<IActionResult> HasStudents(int id)
+        {
+            var course = await _unitOfWork.Courses.GetById(id);
+
+            if (course == null)
+                return NotFound("Course not found");
+
+            bool result =
+                await _unitOfWork.Courses.HasStudentsAsync(id);
+
+            return Ok(result);
+        }
     }
 }

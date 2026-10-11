@@ -10,6 +10,7 @@ namespace CaseStudy4_School_Revission.UoW.Interface
         IGenericRepo<Teacher> Teachers { get; }
         ICourseRepo Courses { get; }
         IEnrollmentRepo Enrollments { get; }
+        IReportRepo Reports { get; }
         Task<int> SaveAsync();
     }
 }
