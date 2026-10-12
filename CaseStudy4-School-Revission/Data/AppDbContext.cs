@@ -10,6 +10,7 @@ namespace CaseStudy4_School_Revission.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<StudentProfile> StudentProfiles { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

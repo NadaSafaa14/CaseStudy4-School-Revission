@@ -11,6 +11,7 @@ namespace CaseStudy4_School_Revission.UoW.Interface
         ICourseRepo Courses { get; }
         IEnrollmentRepo Enrollments { get; }
         IReportRepo Reports { get; }
+        IAuthRepo authRepo { get; }
         Task<int> SaveAsync();
     }
 }

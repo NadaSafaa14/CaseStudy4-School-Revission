@@ -18,8 +18,9 @@ namespace CaseStudy4_School_Revission.UoW.Implementation
         public IEnrollmentRepo Enrollments { get; }
 
         public IReportRepo Reports { get; }
+        public IAuthRepo authRepo { get; }
 
-        public UnitOfWork(AppDbContext context , IStudentRepo students, IGenericRepo<StudentProfile> studentProfiles, IGenericRepo<Teacher> teachers, ICourseRepo courses , IEnrollmentRepo enrollments , IReportRepo reports)
+        public UnitOfWork(AppDbContext context , IStudentRepo students, IGenericRepo<StudentProfile> studentProfiles, IGenericRepo<Teacher> teachers, ICourseRepo courses , IEnrollmentRepo enrollments , IReportRepo reports , IAuthRepo auth)
         {
             _context = context;
             Students = students;
@@ -28,6 +29,7 @@ namespace CaseStudy4_School_Revission.UoW.Implementation
             Courses = courses;
             Enrollments = enrollments;
             Reports = reports;
+            authRepo = auth;
         }
 
         public async Task<int> SaveAsync()

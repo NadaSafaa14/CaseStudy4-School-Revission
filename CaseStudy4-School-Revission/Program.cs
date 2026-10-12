@@ -25,6 +25,8 @@ builder.Services.AddScoped<IEnrollmentRepo, EnrollmentRepo>();
 
 builder.Services.AddScoped<IReportRepo, ReportRepo>();
 
+builder.Services.AddScoped<IAuthRepo, AuthRepo>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
